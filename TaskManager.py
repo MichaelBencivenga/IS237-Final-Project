@@ -1,6 +1,9 @@
 import tkinter as tk
 from tkinter import ttk, messagebox
+import json
+import os
 
+TASKS_FILENAME = "tasks.json"
 
 def open_add_task_window():
     # create new window for task input
@@ -24,7 +27,7 @@ def open_add_task_window():
         else:
             messagebox.showwarning("Input Error", "Please enter a task.")
 
-    # button to confirm adding the task
+    # button to confirm adding new task
     confirm_button = ttk.Button(add_window, text="Add New Task", command=confirm_add)
     confirm_button.grid(row=2, column=0, padx=10, pady=10)
 
@@ -35,9 +38,31 @@ def remove_task():
     else:
         messagebox.showinfo("Remove Task", "No task is selected.")
 
+# load tasks from json and add to listbox
+def load_tasks():
+    if os.path.exists(TASKS_FILENAME):
+        try:
+            with open(TASKS_FILENAME, "r")  as file:
+                tasks = json.load(file)
+                for task in tasks:
+                    task_listbox.insert(tk.END, task)
+        except json.JSONDecodeError:
+            messagebox.showerror("Load Error", "Tasks file not found.")
+
+# save tasks from listbox to json
+def save_tasks():
+    tasks = task_listbox.get(0, tk.END)
+    with open(TASKS_FILENAME, "w") as file:
+        json.dump(tasks, file)
+
+def on_closing():
+    save_tasks()
+    root.destroy()
+
 # create main window
 root = tk.Tk()
 root.title("Task Manager")
+root.protocol("WM_DELETE_WINDOW", on_closing)
 
 # create frame to hold widgets
 main_frame = ttk.Frame(root, padding="10")
@@ -54,6 +79,9 @@ remove_button.grid(row=0, column=1, padx=10, pady=10)
 # create listbox to display tasks
 task_listbox = tk.Listbox(main_frame, width=50, height=10)
 task_listbox.grid(row=1, column=0, columnspan=2, padx=10, pady=10)
+
+# loads tasks from file if there is one when app starts
+load_tasks()
 
 # run the tkinter event loop
 root.mainloop()
