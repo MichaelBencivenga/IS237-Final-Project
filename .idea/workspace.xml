@@ -4,7 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="40d62025-d794-4a59-8df1-af5085d57506" name="Changes" comment="Basic Add and Remove functionality added for Task Manager">
+    <list default="true" id="40d62025-d794-4a59-8df1-af5085d57506" name="Changes" comment="Persistence added using json">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/TaskManager.py" beforeDir="false" afterPath="$PROJECT_DIR$/TaskManager.py" afterDir="false" />
     </list>
@@ -74,7 +74,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1743167966168</updated>
-      <workItem from="1743167967294" duration="4022000" />
+      <workItem from="1743167967294" duration="7371000" />
     </task>
     <task id="LOCAL-00001" summary="Tkinter GUI Hello World">
       <option name="closed" value="true" />
@@ -92,7 +92,15 @@
       <option name="project" value="LOCAL" />
       <updated>1743171069584</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="Persistence added using json">
+      <option name="closed" value="true" />
+      <created>1743172046269</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1743172046269</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -112,9 +120,10 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Tkinter GUI Hello World" />
     <MESSAGE value="Basic Add and Remove functionality added for Task Manager" />
-    <option name="LAST_COMMIT_MESSAGE" value="Basic Add and Remove functionality added for Task Manager" />
+    <MESSAGE value="Persistence added using json" />
+    <option name="LAST_COMMIT_MESSAGE" value="Persistence added using json" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/IS237_Final_Project$TaskManager.coverage" NAME="TaskManager Coverage Results" MODIFIED="1743171873275" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/IS237_Final_Project$TaskManager.coverage" NAME="TaskManager Coverage Results" MODIFIED="1743175367885" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
 </project>
