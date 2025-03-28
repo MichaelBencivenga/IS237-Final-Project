@@ -65,9 +65,9 @@ def open_add_task_window():
 
     # description input field
     desc_label = ttk.Label(add_window, text="Description (optional):")
-    desc_label.grid(row=3, column=0, padx=10, pady=5, sticky=tk.W)
+    desc_label.grid(row=4, column=0, padx=10, pady=5, sticky=tk.W)
     desc_text = tk.Text(add_window, width=30, height=4)
-    desc_text.grid(row=3, column=1, padx=10, pady=5)
+    desc_text.grid(row=4, column=1, padx=10, pady=5)
 
     # function to add new task input and close the window
     def confirm_add():
@@ -112,7 +112,7 @@ def open_add_task_window():
 
     # button to confirm adding the task
     confirm_button = ttk.Button(add_window, text="Add Task", command=confirm_add)
-    confirm_button.grid(row=4, column=0, columnspan=2, padx=10, pady=10)
+    confirm_button.grid(row=5, column=0, columnspan=2, padx=10, pady=10)
 
 def remove_task():
     selection = task_listbox.curselection()
