@@ -15,6 +15,34 @@ def format_task(task):
     else:
         return f"{task['name']} | Deadline: {task['deadline']} | Priority: {task['priority']}"
 
+# helper function to parse deadline string into a datetime object
+def parse_deadline(deadline_str):
+    try:
+        # try to parse date and time (mm/dd hh:mm am/pm)
+        return datetime.strptime(deadline_str, "%m/%d %I:%M %p")
+    except ValueError:
+        try:
+            # fallback to just date (mm/dd)
+            return datetime.strptime(deadline_str, "%m/%d")
+        except ValueError:
+            return datetime.min
+
+# function to sort tasks based on selected criterion
+def sort_tasks():
+    criterion = sort_var.get()
+    if criterion == "Task Name":
+        tasks_data.sort(key=lambda t: t["name"].lower())
+    elif criterion == "Deadline":
+        tasks_data.sort(key=lambda t: parse_deadline(t["deadline"]))
+    elif criterion == "Priority":
+        # custom order: High -> Medium -> Low
+        priority_order = {"High": 0, "Medium": 1, "Low": 2}
+        tasks_data.sort(key=lambda t: priority_order.get(t["priority"], 99))
+    # refresh listbox with sorted tasks
+    task_listbox.delete(0, tk.END)
+    for task in tasks_data:
+        task_listbox.insert(tk.END, format_task(task))
+
 # create new window for task input
 def open_add_task_window():
     add_window = tk.Toplevel(root)
@@ -164,6 +192,19 @@ remove_button.grid(row=0, column=1, padx=10, pady=10)
 # create listbox to display tasks
 task_listbox = tk.Listbox(main_frame, width=80, height=10)
 task_listbox.grid(row=1, column=0, columnspan=2, padx=10, pady=10)
+
+# sorting controls
+sort_label = ttk.Label(main_frame, text="Sort by:")
+sort_label.grid(row=2, column=0, padx=10, pady=5, sticky=tk.W)
+
+sort_options = ["Task Name", "Deadline", "Priority"]
+sort_var = tk.StringVar()
+sort_var.set(sort_options[0])
+sort_menu = ttk.Combobox(main_frame, textvariable=sort_var, values=sort_options, state="readonly")
+sort_menu.grid(row=2, column=0, padx=(70, 10), pady=5, sticky=tk.W)
+
+sort_button = tk.Button(main_frame, text="Sort Tasks", command=sort_tasks, bg="blue", fg="white")
+sort_button.grid(row=2, column=1, padx=10, pady=5, sticky=tk.E)
 
 # loads tasks from file if there is one when app starts
 load_tasks()
