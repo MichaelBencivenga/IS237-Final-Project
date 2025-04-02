@@ -4,7 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="40d62025-d794-4a59-8df1-af5085d57506" name="Changes" comment="Basic sorting functionality added, may want to add more later/change priority so match priority is alphabetical">
+    <list default="true" id="40d62025-d794-4a59-8df1-af5085d57506" name="Changes" comment="countdown added based on deadline, added: update_listbox(), update_timers() altered: format_task(), parse_deadline(), get_countdown()">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/TaskManager.py" beforeDir="false" afterPath="$PROJECT_DIR$/TaskManager.py" afterDir="false" />
     </list>
@@ -79,7 +79,7 @@
       <workItem from="1743183066424" duration="782000" />
       <workItem from="1743200284838" duration="323000" />
       <workItem from="1743377333159" duration="2292000" />
-      <workItem from="1743599429149" duration="2382000" />
+      <workItem from="1743599429149" duration="4542000" />
     </task>
     <task id="LOCAL-00001" summary="Tkinter GUI Hello World">
       <option name="closed" value="true" />
@@ -129,7 +129,15 @@
       <option name="project" value="LOCAL" />
       <updated>1743378094113</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="countdown added based on deadline, added: update_listbox(), update_timers() altered: format_task(), parse_deadline(), get_countdown()">
+      <option name="closed" value="true" />
+      <created>1743602466624</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1743602466624</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -153,9 +161,10 @@
     <MESSAGE value="Add function fully fleshed out into different data entry fields with proper storage and retrival" />
     <MESSAGE value="Fixed bug with priority level" />
     <MESSAGE value="Basic sorting functionality added, may want to add more later/change priority so match priority is alphabetical" />
-    <option name="LAST_COMMIT_MESSAGE" value="Basic sorting functionality added, may want to add more later/change priority so match priority is alphabetical" />
+    <MESSAGE value="countdown added based on deadline, added: update_listbox(), update_timers() altered: format_task(), parse_deadline(), get_countdown()" />
+    <option name="LAST_COMMIT_MESSAGE" value="countdown added based on deadline, added: update_listbox(), update_timers() altered: format_task(), parse_deadline(), get_countdown()" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/IS237_Final_Project$TaskManager.coverage" NAME="TaskManager Coverage Results" MODIFIED="1743601525928" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/IS237_Final_Project$TaskManager.coverage" NAME="TaskManager Coverage Results" MODIFIED="1743604209213" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
 </project>

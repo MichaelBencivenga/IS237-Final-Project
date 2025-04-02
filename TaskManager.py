@@ -64,9 +64,18 @@ def get_countdown(deadline_str):
 
 # refresh listbox based on tasks_data
 def update_listbox():
+    # save current selection
+    selected_indices = task_listbox.curselection()
+
+    # clear listbox and repopulate
     task_listbox.delete(0, tk.END)
     for task in tasks_data:
         task_listbox.insert(tk.END, format_task(task))
+
+    # restore previous selection
+    for index in selected_indices:
+        if index < task_listbox.size():
+            task_listbox.selection_set(index)
 
 # updates countdown timers for all tasks every second
 # may have to change if performance is bad
