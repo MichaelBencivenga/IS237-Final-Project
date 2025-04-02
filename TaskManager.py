@@ -10,22 +10,69 @@ tasks_data = []
 # returns formatted string for display **desc optional**
 def format_task(task):
     description = task.get("description", "")
+    base = f"{task['name']} | Deadline: {task['deadline']} | Priority: {task['priority']}"
+    if " " in task['deadline']:
+        countdown = get_countdown(task['deadline'])
+        base += f" | Countdown: {countdown}"
     if description:
-        return f"{task['name']} | Deadline: {task['deadline']} | Priority: {task['priority']} | Desc: {description}"
-    else:
-        return f"{task['name']} | Deadline: {task['deadline']} | Priority: {task['priority']}"
+        base += f" | Desc: {description}"
+    return base
 
 # helper function to parse deadline string into a datetime object
 def parse_deadline(deadline_str):
-    try:
-        # try to parse date and time (mm/dd hh:mm am/pm)
-        return datetime.strptime(deadline_str, "%m/%d %I:%M %p")
-    except ValueError:
+    now = datetime.now()
+    if " " in deadline_str:
         try:
-            # fallback to just date (mm/dd)
-            return datetime.strptime(deadline_str, "%m/%d")
-        except ValueError:
-            return datetime.min
+            # parse deadline with time (mm/dd hh:mm am/pm)
+            dt = datetime.strptime(deadline_str, "%m/%d %I:%M %p")
+            dt = dt.replace(year=now.year)
+            return dt
+        except Exception:
+            return None
+
+    else:
+        try:
+            # if only date provided deadline defaults to 11:59:59pm
+            dt =  datetime.strptime(deadline_str, "%m/%d")
+            dt = dt.replace(year=now.year, hour=23, minute=59, second=59)
+            return dt
+        except Exception:
+            return None
+
+# returns countdown string (hh:mm:ss) until the deadline, "Expired" if passed
+def get_countdown(deadline_str):
+    dt = parse_deadline(deadline_str)
+    if dt is None:
+        return ""
+    now = datetime.now()
+    diff = dt - now
+    if diff.total_seconds() < 0:
+        return "Expired"
+    seconds = int(diff.total_seconds())
+    if seconds >= 86400:  # greater than or equal to 24 hours
+        days = seconds // 86400
+        seconds %= 86400
+        hours = seconds // 3600
+        minutes = (seconds % 3600) // 60
+        secs = seconds % 60
+        return f"{days}d {hours:02d}:{minutes:02d}:{secs:02d}"
+    else:
+        hours = seconds // 3600
+        minutes = (seconds % 3600) // 60
+        secs = seconds % 60
+        return f"{hours:02d}:{minutes:02d}:{secs:02d}"
+
+# refresh listbox based on tasks_data
+def update_listbox():
+    task_listbox.delete(0, tk.END)
+    for task in tasks_data:
+        task_listbox.insert(tk.END, format_task(task))
+
+# updates countdown timers for all tasks every second
+# may have to change if performance is bad
+def update_timers():
+    update_listbox()
+    root.after(1000, update_timers)
 
 # function to sort tasks based on selected criterion
 def sort_tasks():
@@ -183,11 +230,11 @@ main_frame.grid(column=0, row=0, sticky=(tk.N, tk.S, tk.E, tk.W))
 
 # add button, opens add task window
 add_button = tk.Button(main_frame, text="Add New Task", command=open_add_task_window, bg="green", fg="white")
-add_button.grid(row=0, column=0, padx=10, pady=10)
+add_button.grid(row=0, column=0, padx=10, pady=10, sticky=tk.W)
 
 # remove button, removes selected task
 remove_button = tk.Button(main_frame, text="Remove Selected Task", command=remove_task, bg="red", fg="white")
-remove_button.grid(row=0, column=1, padx=10, pady=10)
+remove_button.grid(row=0, column=1, padx=10, pady=10, sticky=tk.E)
 
 # create listbox to display tasks
 task_listbox = tk.Listbox(main_frame, width=80, height=10)
@@ -195,7 +242,7 @@ task_listbox.grid(row=1, column=0, columnspan=2, padx=10, pady=10)
 
 # sorting controls
 sort_label = ttk.Label(main_frame, text="Sort by:")
-sort_label.grid(row=2, column=0, padx=10, pady=5, sticky=tk.W)
+sort_label.grid(row=2, column=0, padx=10, pady=10, sticky=tk.W)
 
 sort_options = ["Task Name", "Deadline", "Priority"]
 sort_var = tk.StringVar()
@@ -204,10 +251,13 @@ sort_menu = ttk.Combobox(main_frame, textvariable=sort_var, values=sort_options,
 sort_menu.grid(row=2, column=0, padx=(70, 10), pady=5, sticky=tk.W)
 
 sort_button = tk.Button(main_frame, text="Sort Tasks", command=sort_tasks, bg="blue", fg="white")
-sort_button.grid(row=2, column=1, padx=10, pady=5, sticky=tk.E)
+sort_button.grid(row=2, column=1, padx=10, pady=10, sticky=tk.E)
 
 # loads tasks from file if there is one when app starts
 load_tasks()
+
+# call made for live countdown
+update_timers()
 
 # run the tkinter event loop
 root.mainloop()
