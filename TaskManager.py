@@ -210,14 +210,14 @@ def open_edit_task_window():
     edit_window = tk.Toplevel(root)
     edit_window.title("Edit Task")
 
-    # Task Name
+    # task name
     ttk.Label(edit_window, text="Task Name:").grid(row=0, column=0, padx=10, pady=5, sticky=tk.W)
     name_entry = ttk.Entry(edit_window, width=40)
     name_entry.grid(row=0, column=1, padx=10, pady=5)
     name_entry.insert(0, task.get("name", ""))
     name_entry.focus()
 
-    # Deadline Date & Time
+    # deadline date time
     ttk.Label(edit_window, text="Deadline Date (mm/dd):").grid(row=1, column=0, padx=10, pady=5, sticky=tk.W)
     date_entry = ttk.Entry(edit_window, width=40)
     date_entry.grid(row=1, column=1, padx=10, pady=5)
@@ -233,13 +233,13 @@ def open_edit_task_window():
     period_menu = ttk.Combobox(time_frame, textvariable=period_var, values=["AM", "PM"], state="readonly", width=5)
     period_menu.grid(row=0, column=2, padx=(0, 5), pady=5, sticky=tk.W)
 
-    # Prepopulate date and time fields
+    # prepopulate date and time fields
     deadline = task.get("deadline", "")
     if " " in deadline:
         try:
             date_part, time_part = deadline.split(" ", 1)
             date_entry.insert(0, date_part)
-            # Expecting the time format "hh:mm AM/PM"
+            # expects time format "hh:mm am/pm"
             try:
                 time_split = time_part.split(" ")
                 if len(time_split) == 2:
@@ -255,14 +255,14 @@ def open_edit_task_window():
     else:
         date_entry.insert(0, deadline)
 
-    # Priority
+    # priority
     ttk.Label(edit_window, text="Priority:").grid(row=3, column=0, padx=10, pady=5, sticky=tk.W)
     priority_var = tk.StringVar(edit_window)
     priority_var.set(task.get("priority", "Low"))
     priority_menu = ttk.Combobox(edit_window, textvariable=priority_var, values=["Low", "Medium", "High"], state="readonly")
     priority_menu.grid(row=3, column=1, padx=10, pady=5)
 
-    # Description
+    # description
     ttk.Label(edit_window, text="Description (optional):").grid(row=4, column=0, padx=10, pady=5, sticky=tk.W)
     desc_text = tk.Text(edit_window, width=30, height=4)
     desc_text.grid(row=4, column=1, padx=10, pady=5)
@@ -346,7 +346,7 @@ main_frame.grid(column=0, row=0, sticky=(tk.N, tk.S, tk.E, tk.W))
 add_button = tk.Button(main_frame, text="Add New Task", command=open_add_task_window, bg="green", fg="white")
 add_button.grid(row=0, column=0, padx=10, pady=10, sticky=tk.W)
 
-# remove button, removes selected task  NEED TO FIX LOCATION OF REMOVE
+# remove button, removes selected task
 remove_button = tk.Button(main_frame, text="Remove Selected Task", command=remove_task, bg="red", fg="white")
 remove_button.grid(row=0, column=1, padx=10, pady=10)
 
