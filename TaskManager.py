@@ -198,6 +198,111 @@ def open_add_task_window():
     confirm_button = ttk.Button(add_window, text="Add Task", command=confirm_add)
     confirm_button.grid(row=5, column=0, columnspan=2, padx=10, pady=10)
 
+def open_edit_task_window():
+    selection = task_listbox.curselection()
+    if not selection:
+        messagebox.showinfo("Edit Task", "Please select a task to edit.")
+        return
+
+    index = selection[0]
+    task = tasks_data[index]
+
+    edit_window = tk.Toplevel(root)
+    edit_window.title("Edit Task")
+
+    # Task Name
+    ttk.Label(edit_window, text="Task Name:").grid(row=0, column=0, padx=10, pady=5, sticky=tk.W)
+    name_entry = ttk.Entry(edit_window, width=40)
+    name_entry.grid(row=0, column=1, padx=10, pady=5)
+    name_entry.insert(0, task.get("name", ""))
+    name_entry.focus()
+
+    # Deadline Date & Time
+    ttk.Label(edit_window, text="Deadline Date (mm/dd):").grid(row=1, column=0, padx=10, pady=5, sticky=tk.W)
+    date_entry = ttk.Entry(edit_window, width=40)
+    date_entry.grid(row=1, column=1, padx=10, pady=5)
+
+    ttk.Label(edit_window, text="Deadline Time (optional, hh:mm):").grid(row=2, column=0, padx=10, pady=5, sticky=tk.W)
+    time_frame = ttk.Frame(edit_window)
+    time_frame.grid(row=2, column=1, padx=10, pady=5, sticky=tk.W)
+    time_entry = ttk.Entry(time_frame, width=21)
+    time_entry.grid(row=0, column=0, padx=(0, 5), pady=5)
+    ttk.Label(time_frame, text="AM/PM:").grid(row=0, column=1, padx=(0, 5), pady=5, sticky=tk.W)
+    period_var = tk.StringVar(time_frame)
+    period_var.set("AM")
+    period_menu = ttk.Combobox(time_frame, textvariable=period_var, values=["AM", "PM"], state="readonly", width=5)
+    period_menu.grid(row=0, column=2, padx=(0, 5), pady=5, sticky=tk.W)
+
+    # Prepopulate date and time fields
+    deadline = task.get("deadline", "")
+    if " " in deadline:
+        try:
+            date_part, time_part = deadline.split(" ", 1)
+            date_entry.insert(0, date_part)
+            # Expecting the time format "hh:mm AM/PM"
+            try:
+                time_split = time_part.split(" ")
+                if len(time_split) == 2:
+                    time_val, period_val = time_split
+                    time_entry.insert(0, time_val)
+                    period_var.set(period_val)
+                else:
+                    time_entry.insert(0, time_part)
+            except Exception:
+                time_entry.insert(0, "")
+        except Exception:
+            date_entry.insert(0, deadline)
+    else:
+        date_entry.insert(0, deadline)
+
+    # Priority
+    ttk.Label(edit_window, text="Priority:").grid(row=3, column=0, padx=10, pady=5, sticky=tk.W)
+    priority_var = tk.StringVar(edit_window)
+    priority_var.set(task.get("priority", "Low"))
+    priority_menu = ttk.Combobox(edit_window, textvariable=priority_var, values=["Low", "Medium", "High"], state="readonly")
+    priority_menu.grid(row=3, column=1, padx=10, pady=5)
+
+    # Description
+    ttk.Label(edit_window, text="Description (optional):").grid(row=4, column=0, padx=10, pady=5, sticky=tk.W)
+    desc_text = tk.Text(edit_window, width=30, height=4)
+    desc_text.grid(row=4, column=1, padx=10, pady=5)
+    desc_text.insert("1.0", task.get("description", ""))
+
+    def confirm_edit():
+        new_name = name_entry.get().strip()
+        new_date = date_entry.get().strip()
+        new_time = time_entry.get().strip()
+        new_period = period_var.get().strip()
+        new_priority = priority_var.get().strip()
+        new_description = desc_text.get("1.0", tk.END).strip()
+
+        if not new_name:
+            messagebox.showwarning("Input Error", "Please enter a task name.")
+            return
+
+        if new_time:
+            try:
+                parsed_time = datetime.strptime(new_time + " " + new_period, "%I:%M %p")
+                normalized_time = parsed_time.strftime("%I:%M %p")
+                new_deadline = f"{new_date} {normalized_time}"
+            except ValueError:
+                messagebox.showwarning("Input Error", "Deadline time should be in HH:MM format with a valid AM/PM selection.")
+                return
+        else:
+            new_deadline = new_date
+
+        updated_task = {
+            "name": new_name,
+            "deadline": new_deadline,
+            "priority": new_priority,
+            "description": new_description
+        }
+        tasks_data[index] = updated_task
+        update_listbox()
+        edit_window.destroy()
+
+    ttk.Button(edit_window, text="Save Changes", command=confirm_edit).grid(row=5, column=0, columnspan=2, padx=10, pady=10)
+
 def remove_task():
     selection = task_listbox.curselection()
     if selection:
@@ -241,13 +346,17 @@ main_frame.grid(column=0, row=0, sticky=(tk.N, tk.S, tk.E, tk.W))
 add_button = tk.Button(main_frame, text="Add New Task", command=open_add_task_window, bg="green", fg="white")
 add_button.grid(row=0, column=0, padx=10, pady=10, sticky=tk.W)
 
-# remove button, removes selected task
+# remove button, removes selected task  NEED TO FIX LOCATION OF REMOVE
 remove_button = tk.Button(main_frame, text="Remove Selected Task", command=remove_task, bg="red", fg="white")
-remove_button.grid(row=0, column=1, padx=10, pady=10, sticky=tk.E)
+remove_button.grid(row=0, column=1, padx=10, pady=10)
+
+# edit button, opens edit task window
+edit_button = tk.Button(main_frame, text="Edit Selected Task", command=open_edit_task_window, bg="orange", fg="white")
+edit_button.grid(row=0, column=2, padx=10, pady=10)
 
 # create listbox to display tasks
 task_listbox = tk.Listbox(main_frame, width=80, height=10)
-task_listbox.grid(row=1, column=0, columnspan=2, padx=10, pady=10)
+task_listbox.grid(row=1, column=0, columnspan=3, padx=10, pady=10)
 
 # sorting controls
 sort_label = ttk.Label(main_frame, text="Sort by:")
@@ -260,7 +369,7 @@ sort_menu = ttk.Combobox(main_frame, textvariable=sort_var, values=sort_options,
 sort_menu.grid(row=2, column=0, padx=(70, 10), pady=5, sticky=tk.W)
 
 sort_button = tk.Button(main_frame, text="Sort Tasks", command=sort_tasks, bg="blue", fg="white")
-sort_button.grid(row=2, column=1, padx=10, pady=10, sticky=tk.E)
+sort_button.grid(row=2, column=2, padx=10, pady=10, sticky=tk.E)
 
 # loads tasks from file if there is one when app starts
 load_tasks()
